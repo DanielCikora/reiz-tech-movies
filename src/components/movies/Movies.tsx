@@ -29,6 +29,7 @@ const Movies = () => {
       "https://api.tvmaze.com/shows"
     );
     const fetchedMovies = response.data;
+    console.log(fetchedMovies);
     setAllMovies(fetchedMovies);
 
     const allGenres = new Set<string>();

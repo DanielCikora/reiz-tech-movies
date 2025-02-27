@@ -5,7 +5,7 @@ interface MovieDetailsProps {
   params: { id: string };
 }
 const MovieOverview = async ({ params }: MovieDetailsProps) => {
-  const movieId = Number(params.id);
+  const movieId = parseInt(params.id, 10);
   try {
     const response = await axios.get(`https://api.tvmaze.com/shows/${movieId}`);
     const movie: MoviesDataTypes = response.data;
