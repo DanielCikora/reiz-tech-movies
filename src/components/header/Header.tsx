@@ -24,10 +24,10 @@ const Header = () => {
     { id: 1, text: "Favorites", href: "/favorites" },
   ];
   return (
-    <section className='header py-4'>
+    <section className='header py-8 px-5'>
       <div className='wrapper'>
-        <div className='header-content flex justify-between w-full px-4'>
-          <div className='flex flex-row items-center gap-4'>
+        <div className='header-content flex justify-between w-full'>
+          <div className='flex flex-row items-center gap-10'>
             <Link href='/' className='header-content__image block'>
               <img
                 className='block w-full h-auto max-w-16'
@@ -73,7 +73,7 @@ const Header = () => {
               </svg>
             </label>
           </div>
-          <div className='header-content__links'>
+          <div className='header-content__links flex items-center'>
             <ul className='header-links flex gap-4'>
               {headerLinks.map(({ id, text, href }) => (
                 <li className='header-links__li' key={id}>

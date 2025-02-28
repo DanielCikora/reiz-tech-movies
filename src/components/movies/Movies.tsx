@@ -13,6 +13,8 @@ const Movies = () => {
   const [allMovies, setAllMovies] = useState<MoviesDataTypes[]>([]);
   const [genres, setGenres] = useState<string[]>([]);
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+  const [statuses, setStatuses] = useState<string[]>([]);
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [favorites, setFavorites] = useState<MoviesDataTypes[]>(() => {
@@ -33,17 +35,20 @@ const Movies = () => {
     setAllMovies(fetchedMovies);
 
     const allGenres = new Set<string>();
+    const allStatuses = new Set<string>();
     fetchedMovies.forEach((movie) => {
       movie.genres.forEach((genre) => allGenres.add(genre));
+      allStatuses.add(movie.status);
     });
     setGenres(Array.from(allGenres));
-
-    updateMovies(fetchedMovies, selectedGenres, 1);
+    setStatuses(Array.from(allStatuses));
+    updateMovies(fetchedMovies, selectedGenres, selectedStatus, 1);
   };
 
   const updateMovies = (
     moviesList: MoviesDataTypes[],
     filters: string[],
+    status: string,
     page: number
   ) => {
     let filteredMovies = moviesList;
@@ -51,6 +56,12 @@ const Movies = () => {
     if (filters.length > 0) {
       filteredMovies = moviesList.filter((movie) =>
         filters.every((filter) => movie.genres.includes(filter))
+      );
+    }
+
+    if (status) {
+      filteredMovies = filteredMovies.filter(
+        (movie) => movie.status === status
       );
     }
 
@@ -67,9 +78,13 @@ const Movies = () => {
         ? prevGenres.filter((g) => g !== genre)
         : [...prevGenres, genre];
 
-      updateMovies(allMovies, updatedGenres, 1);
+      updateMovies(allMovies, updatedGenres, selectedStatus, 1);
       return updatedGenres;
     });
+  };
+  const handleStatusSelection = (status: string) => {
+    setSelectedStatus(status);
+    updateMovies(allMovies, selectedGenres, status, 1); // Update movies with selected status
   };
 
   useEffect(() => {
@@ -82,7 +97,7 @@ const Movies = () => {
 
   const handlePageClick = (pageNumber: number) => {
     if (pageNumber !== currentPage) {
-      updateMovies(allMovies, selectedGenres, pageNumber);
+      updateMovies(allMovies, selectedGenres, selectedStatus, pageNumber);
     }
   };
 
@@ -113,6 +128,12 @@ const Movies = () => {
     });
   };
 
+  const handleClearFilters = () => {
+    setSelectedGenres([]);
+    setSelectedStatus("");
+    updateMovies(allMovies, [], "", 1);
+  };
+
   return (
     <section className='movies min-h-dvh'>
       <div className='wrapper'>
@@ -120,12 +141,19 @@ const Movies = () => {
           genres={genres}
           selectedGenres={selectedGenres}
           onGenreChange={handleGenreSelection}
+          statuses={statuses}
+          selectedStatus={selectedStatus}
+          onStatusChange={handleStatusSelection}
+          onClearFilters={handleClearFilters}
         />
         <div className='grid grid-cols-3 gap-8 w-full mb-20'>
           {movies.map((movie) => (
             <Link
               href={`/overview/${movie.id}`}
               key={movie.id}
+              onClick={(e) => {
+                if (e.defaultPrevented) return;
+              }}
               className='cursor-pointer rounded hover:shadow-2xl hover:shadow-gray-400 shadow-inherit transition-all duration-200 ease-in-out p-4 w-full h-full flex md:flex-row flex-col gap-4'
             >
               <div className='movie__image w-full'>
@@ -137,23 +165,27 @@ const Movies = () => {
               </div>
               <div className='movie__description w-full flex flex-col justify-between'>
                 <span>
-                  <span className='flex justify-between'>
+                  <span className='flex justify-between relative'>
                     <h2 className='mb-8 text-2xl font-semibold'>
                       {movie.name}
                     </h2>
                     <button
-                      onClick={() => handleToggleFavorite(movie)}
-                      className='relative z-50 flex items-start'
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleToggleFavorite(movie);
+                      }}
+                      className='absolute z-10 top-0 right-0 flex items-start'
                       type='button'
                     >
                       {favorites.some((fav) => fav.id === movie.id) ? (
                         <FontAwesomeIcon
-                          className='block text-2xl'
+                          className='block text-3xl'
                           icon={solidHeart}
                         />
                       ) : (
                         <FontAwesomeIcon
-                          className='block text-2xl'
+                          className='block text-3xl'
                           icon={regularHeart}
                         />
                       )}
