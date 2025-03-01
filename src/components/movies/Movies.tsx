@@ -47,7 +47,6 @@ const Movies = () => {
 
   const sortMovies = (moviesList: MoviesDataTypes[], sortOption: string) => {
     if (sortOption === "all") return moviesList;
-
     return [...moviesList].sort((a, b) => {
       switch (sortOption) {
         case "name-asc":
@@ -172,13 +171,14 @@ const Movies = () => {
   const handleClearFilters = () => {
     setSelectedGenres([]);
     setSelectedStatus("");
+    setSortType("all");
     updateMovies(allMovies, [], "", 1, sortType);
   };
 
   return (
     <section className='movies min-h-dvh'>
       <div className='wrapper'>
-        <section className='filtering-section py-2 flex items-center gap-4'>
+        <section className='filtering-section py-10 flex md:flex-row flex-col md:items-center gap-4'>
           <Sorting onChange={handleSortChange} />
           <Filters
             genres={genres}
@@ -190,7 +190,7 @@ const Movies = () => {
             onClearFilters={handleClearFilters}
           />
         </section>
-        <div className='grid grid-cols-3 gap-8 w-full mb-20'>
+        <div className='grid lg:grid-cols-2 grid-cols-1 place-items-center gap-8 w-full mb-20'>
           {movies.map((movie) => (
             <Link
               href={`/overview/${movie.id}`}
@@ -200,7 +200,7 @@ const Movies = () => {
               }}
               className='cursor-pointer rounded hover:shadow-2xl hover:shadow-gray-400 shadow-inherit transition-all duration-200 ease-in-out p-4 w-full h-full flex md:flex-row flex-col gap-4'
             >
-              <div className='movie__image w-full'>
+              <div className='movie__image w-full md:max-w-80'>
                 <img
                   className='block w-full h-auto'
                   src={movie.image.original}
@@ -209,7 +209,7 @@ const Movies = () => {
               </div>
               <div className='movie__description w-full flex flex-col justify-between'>
                 <span>
-                  <span className='flex justify-between relative'>
+                  <span className='flex justify-between'>
                     <h2 className='mb-8 text-2xl font-semibold'>
                       {movie.name}
                     </h2>
@@ -219,32 +219,35 @@ const Movies = () => {
                         e.stopPropagation();
                         handleToggleFavorite(movie);
                       }}
-                      className='absolute z-10 top-0 right-0 flex items-start'
+                      className='relative z-10 top-0 right-0 flex items-start'
                       type='button'
                     >
                       {favorites.some((fav) => fav.id === movie.id) ? (
                         <FontAwesomeIcon
-                          className='block text-3xl text-green-300'
+                          className='block text-3xl text-green-500'
                           icon={solidHeart}
                         />
                       ) : (
                         <FontAwesomeIcon
-                          className='block text-3xl text-green-300'
+                          className='block text-3xl text-green-500'
                           icon={regularHeart}
                         />
                       )}
                     </button>
                   </span>
                   <p
-                    className='mediumLarge:text-xl text-lg text-pretty'
+                    className='mediumLarge:text-lg text-md'
                     dangerouslySetInnerHTML={{
-                      __html: sanitizeHTML(`${movie.summary.slice(0, 80)}...`),
+                      __html: sanitizeHTML(`${movie.summary.slice(0, 100)}...`),
                     }}
                   />
                 </span>
-                <span className='flex md:flex-row flex-col justify-between'>
-                  <p>{movie.rating.average} / 10</p>
-                  {movie.genres.join(", ")}
+                <span className='flex flex-col gap-1'>
+                  <h5>Rating</h5>
+                  <span className='flex justify-between w-full '>
+                    <p>{movie.rating.average} / 10</p>
+                    {movie.genres.join(", ")}
+                  </span>
                 </span>
               </div>
             </Link>
@@ -258,7 +261,7 @@ const Movies = () => {
               disabled={page === currentPage}
               className={`font-semibold w-10 h-10 mx-1 rounded-md ${
                 page === currentPage
-                  ? "bg-green-300 text-black"
+                  ? "bg-green-500 text-black"
                   : "bg-gray-800 text-white"
               }`}
             >

@@ -2,6 +2,20 @@ import { ChangeEventHandler } from "react";
 export interface MovieDetailsDataTypes {
   params: { id: string };
 }
+export interface HeaderLinksDataTypes {
+  id: number;
+  text: string;
+  href: string;
+}
+export interface HeaderLink {
+  id: number;
+  text: string;
+  href: string;
+}
+export interface DarkModeButtonDataTypes {
+  handleDarkModeToggle: () => void;
+  isDarkMode: boolean;
+}
 export interface DarkModeDataTypes {
   isDarkMode: boolean;
 }

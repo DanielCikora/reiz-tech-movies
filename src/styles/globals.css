@@ -1,4 +1,5 @@
 @import "./normalize.css";
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,24 +10,49 @@
   margin: 0;
   border: 0;
 }
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Outfit", sans-serif;
 }
 .wrapper {
-  max-width: 1920px;
+  max-width: 1880px;
   width: 100%;
   padding: 0 20px;
   margin: 0 auto;
+}
+.loader {
+  width: 60px;
+  aspect-ratio: 1.154;
+  --c: #0000, #22c55e 2deg 59deg, #0000 61deg;
+  --c1: conic-gradient(from 149deg at top, var(--c));
+  --c2: conic-gradient(from -31deg at bottom, var(--c));
+  background: var(--c1) top, var(--c1) bottom right, var(--c2) bottom,
+    var(--c1) bottom left;
+  background-size: 50% 50%;
+  background-repeat: no-repeat;
+  animation: l37 1s infinite;
+}
+@keyframes l37 {
+  80%,
+  100% {
+    background-position: bottom right, bottom left, bottom, top;
+  }
+}
+/* Nice Hover effect I can use for Links */
+.nice-underline {
+  position: relative;
+  display: block;
+  font-weight: bold;
+}
+.nice-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: #22c55e;
+  transition: width 0.3s ease-in-out;
+}
+.nice-underline:hover::after {
+  width: 100%;
 }

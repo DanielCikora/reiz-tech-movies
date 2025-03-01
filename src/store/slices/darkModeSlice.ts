@@ -1,9 +1,15 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
+import { createSlice } from "@reduxjs/toolkit";
 import { DarkModeDataTypes } from "@/types";
 
+const getInitialDarkMode = () => {
+  if (typeof window !== "undefined") {
+    return JSON.parse(localStorage.getItem("darkMode") || "false");
+  }
+  return false;
+};
+
 const initialState: DarkModeDataTypes = {
-  isDarkMode: false,
+  isDarkMode: getInitialDarkMode(),
 };
 
 const darkModeSlice = createSlice({
@@ -12,12 +18,12 @@ const darkModeSlice = createSlice({
   reducers: {
     toggleDarkMode(state) {
       state.isDarkMode = !state.isDarkMode;
-    },
-    setDarkMode(state, action: PayloadAction<boolean>) {
-      state.isDarkMode = action.payload;
+      if (typeof window !== "undefined") {
+        localStorage.setItem("darkMode", JSON.stringify(state.isDarkMode));
+      }
     },
   },
 });
 
-export const { toggleDarkMode, setDarkMode } = darkModeSlice.actions;
+export const { toggleDarkMode } = darkModeSlice.actions;
 export default darkModeSlice.reducer;
