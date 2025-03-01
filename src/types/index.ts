@@ -1,9 +1,10 @@
 import { ChangeEventHandler } from "react";
-
+export interface MovieDetailsDataTypes {
+  params: { id: string };
+}
 export interface DarkModeDataTypes {
   isDarkMode: boolean;
 }
-
 export interface SortingDataTypes {
   onChange: ChangeEventHandler<HTMLSelectElement>;
 }
@@ -17,7 +18,7 @@ export interface MoviesDataTypes {
   status: string;
   runtime: number;
   averageRuntime: number;
-  premiered: string | Date;
+  premiered: string;
   ended: string;
   officialSite: string;
   schedule: {

@@ -16,7 +16,7 @@ const Favorites = () => {
       <div className='wrapper'>
         <h2 className='text-3xl font-bold mb-4 pl-4'>Favorites</h2>
         {favorites.length === 0 ? (
-          <p>No favorites added yet.</p>
+          <h1 className='text-center m-auto'>No favorites added yet.</h1>
         ) : (
           <div className='grid grid-cols-3 gap-8'>
             {favorites.map((movie) => (

@@ -9,6 +9,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import Sorting from "../sorting/Sorting";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { toggleFavorite } from "@/store/slices/favoritesSlice";
+import { toast } from "react-toastify";
 const Movies = () => {
   const [movies, setMovies] = useState<MoviesDataTypes[]>([]);
   const [allMovies, setAllMovies] = useState<MoviesDataTypes[]>([]);
@@ -19,20 +23,15 @@ const Movies = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [sortType, setSortType] = useState<string>("name");
-  const [favorites, setFavorites] = useState<MoviesDataTypes[]>(() => {
-    if (typeof window !== "undefined") {
-      const storedFavorites = localStorage.getItem("movieFavorites");
-      return storedFavorites ? JSON.parse(storedFavorites) : [];
-    }
-    return [];
-  });
+
+  const dispatch = useDispatch();
+  const favorites = useSelector((state: RootState) => state.favorites.movies);
 
   const fetchMovies = async () => {
     const response = await axios.get<MoviesDataTypes[]>(
       "https://api.tvmaze.com/shows"
     );
     const fetchedMovies = response.data;
-    console.log(fetchedMovies);
     setAllMovies(fetchedMovies);
 
     const allGenres = new Set<string>();
@@ -161,16 +160,13 @@ const Movies = () => {
   };
 
   const handleToggleFavorite = (movie: MoviesDataTypes) => {
-    setFavorites((prevFavorites) => {
-      const isFavorite = prevFavorites.some((fav) => fav.id === movie.id);
-
-      const updatedFavorites = isFavorite
-        ? prevFavorites.filter((fav) => fav.id !== movie.id)
-        : [...prevFavorites, movie];
-
-      localStorage.setItem("movieFavorites", JSON.stringify(updatedFavorites));
-      return updatedFavorites;
-    });
+    dispatch(toggleFavorite(movie));
+    const isFavorite = favorites.some((fav) => fav.id === movie.id);
+    if (isFavorite) {
+      toast.success("Movie Removed from Favorites!");
+    } else {
+      toast.success("Movie Added to Favorites!");
+    }
   };
 
   const handleClearFilters = () => {
