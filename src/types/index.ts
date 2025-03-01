@@ -1,3 +1,7 @@
+import { ChangeEventHandler } from "react";
+export interface SortingDataTypes {
+  onChange: ChangeEventHandler<HTMLSelectElement>;
+}
 export interface MoviesDataTypes {
   id: number;
   url: string;
@@ -8,7 +12,7 @@ export interface MoviesDataTypes {
   status: string;
   runtime: number;
   averageRuntime: number;
-  premiered: string;
+  premiered: string | Date;
   ended: string;
   officialSite: string;
   schedule: {

@@ -8,6 +8,7 @@ import Filters from "../filters/Filters";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
+import Sorting from "../sorting/Sorting";
 const Movies = () => {
   const [movies, setMovies] = useState<MoviesDataTypes[]>([]);
   const [allMovies, setAllMovies] = useState<MoviesDataTypes[]>([]);
@@ -17,6 +18,7 @@ const Movies = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
+  const [sortType, setSortType] = useState<string>("name");
   const [favorites, setFavorites] = useState<MoviesDataTypes[]>(() => {
     if (typeof window !== "undefined") {
       const storedFavorites = localStorage.getItem("movieFavorites");
@@ -24,7 +26,6 @@ const Movies = () => {
     }
     return [];
   });
-  const moviesPerPage: number = 6;
 
   const fetchMovies = async () => {
     const response = await axios.get<MoviesDataTypes[]>(
@@ -42,14 +43,38 @@ const Movies = () => {
     });
     setGenres(Array.from(allGenres));
     setStatuses(Array.from(allStatuses));
-    updateMovies(fetchedMovies, selectedGenres, selectedStatus, 1);
+    updateMovies(fetchedMovies, selectedGenres, selectedStatus, 1, sortType);
+  };
+
+  const sortMovies = (moviesList: MoviesDataTypes[], sortOption: string) => {
+    if (sortOption === "all") return moviesList;
+
+    return [...moviesList].sort((a, b) => {
+      switch (sortOption) {
+        case "name-asc":
+          return a.name.localeCompare(b.name);
+        case "name-desc":
+          return b.name.localeCompare(a.name);
+        case "premiered-asc":
+          return (
+            new Date(a.premiered).getTime() - new Date(b.premiered).getTime()
+          );
+        case "premiered-desc":
+          return (
+            new Date(b.premiered).getTime() - new Date(a.premiered).getTime()
+          );
+        default:
+          return 0;
+      }
+    });
   };
 
   const updateMovies = (
     moviesList: MoviesDataTypes[],
     filters: string[],
     status: string,
-    page: number
+    page: number,
+    sortOption: string
   ) => {
     let filteredMovies = moviesList;
 
@@ -65,11 +90,20 @@ const Movies = () => {
       );
     }
 
+    const sortedMovies = sortMovies(filteredMovies, sortOption);
+
+    const moviesPerPage: number = 6;
     const startIndex = (page - 1) * moviesPerPage;
     const endIndex = page * moviesPerPage;
-    setMovies(filteredMovies.slice(startIndex, endIndex));
-    setTotalPages(Math.ceil(filteredMovies.length / moviesPerPage));
+    setMovies(sortedMovies.slice(startIndex, endIndex));
+    setTotalPages(Math.ceil(sortedMovies.length / moviesPerPage));
     setCurrentPage(page);
+  };
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newSortOption = e.target.value;
+    setSortType(newSortOption);
+    updateMovies(allMovies, selectedGenres, selectedStatus, 1, newSortOption);
   };
 
   const handleGenreSelection = (genre: string) => {
@@ -78,18 +112,23 @@ const Movies = () => {
         ? prevGenres.filter((g) => g !== genre)
         : [...prevGenres, genre];
 
-      updateMovies(allMovies, updatedGenres, selectedStatus, 1);
+      updateMovies(allMovies, updatedGenres, selectedStatus, 1, sortType);
       return updatedGenres;
     });
   };
+
   const handleStatusSelection = (status: string) => {
     setSelectedStatus(status);
-    updateMovies(allMovies, selectedGenres, status, 1); // Update movies with selected status
+    updateMovies(allMovies, selectedGenres, status, 1, sortType);
   };
 
   useEffect(() => {
     fetchMovies();
   }, []);
+
+  useEffect(() => {
+    updateMovies(allMovies, selectedGenres, selectedStatus, 1, sortType);
+  }, [selectedGenres, selectedStatus, sortType, allMovies]);
 
   const sanitizeHTML = (html?: string) => {
     return DOMPurify.sanitize(html || "");
@@ -97,7 +136,13 @@ const Movies = () => {
 
   const handlePageClick = (pageNumber: number) => {
     if (pageNumber !== currentPage) {
-      updateMovies(allMovies, selectedGenres, selectedStatus, pageNumber);
+      updateMovies(
+        allMovies,
+        selectedGenres,
+        selectedStatus,
+        pageNumber,
+        sortType
+      );
     }
   };
 
@@ -131,21 +176,24 @@ const Movies = () => {
   const handleClearFilters = () => {
     setSelectedGenres([]);
     setSelectedStatus("");
-    updateMovies(allMovies, [], "", 1);
+    updateMovies(allMovies, [], "", 1, sortType);
   };
 
   return (
     <section className='movies min-h-dvh'>
       <div className='wrapper'>
-        <Filters
-          genres={genres}
-          selectedGenres={selectedGenres}
-          onGenreChange={handleGenreSelection}
-          statuses={statuses}
-          selectedStatus={selectedStatus}
-          onStatusChange={handleStatusSelection}
-          onClearFilters={handleClearFilters}
-        />
+        <section className='filtering-section py-2 flex items-center gap-4'>
+          <Sorting onChange={handleSortChange} />
+          <Filters
+            genres={genres}
+            selectedGenres={selectedGenres}
+            onGenreChange={handleGenreSelection}
+            statuses={statuses}
+            selectedStatus={selectedStatus}
+            onStatusChange={handleStatusSelection}
+            onClearFilters={handleClearFilters}
+          />
+        </section>
         <div className='grid grid-cols-3 gap-8 w-full mb-20'>
           {movies.map((movie) => (
             <Link
