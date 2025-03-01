@@ -1,4 +1,9 @@
 import { ChangeEventHandler } from "react";
+
+export interface DarkModeDataTypes {
+  isDarkMode: boolean;
+}
+
 export interface SortingDataTypes {
   onChange: ChangeEventHandler<HTMLSelectElement>;
 }

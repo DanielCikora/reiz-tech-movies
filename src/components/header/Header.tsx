@@ -1,24 +1,34 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDarkMode } from "@/store/slices/darkModeSlice";
+import { RootState } from "@/store/store";
 type HeaderLink = {
   id: number;
   text: string;
   href: string;
 };
 const Header = () => {
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const isDarkMode = useSelector(
+    (state: RootState) => state.darkMode.isDarkMode
+  );
 
   const handleDarkModeToggle = () => {
-    setDarkMode((prevMode) => !prevMode);
-    if (darkMode) {
-      document.body.classList.add("dark");
-      localStorage.setItem("darkMode", JSON.stringify(darkMode));
-    } else {
-      document.body.classList.remove("dark");
-      localStorage.removeItem("darkMode");
-    }
+    dispatch(toggleDarkMode());
   };
+
+  if (isDarkMode) {
+    if (typeof window !== "undefined") {
+      document.documentElement.classList.add("dark");
+    }
+  } else {
+    if (typeof window !== "undefined") {
+      document.documentElement.classList.remove("dark");
+    }
+  }
+
   const headerLinks: HeaderLink[] = [
     { id: 0, text: "Home", href: "/" },
     { id: 1, text: "Favorites", href: "/favorites" },

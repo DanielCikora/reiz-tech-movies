@@ -228,12 +228,12 @@ const Movies = () => {
                     >
                       {favorites.some((fav) => fav.id === movie.id) ? (
                         <FontAwesomeIcon
-                          className='block text-3xl'
+                          className='block text-3xl text-green-300'
                           icon={solidHeart}
                         />
                       ) : (
                         <FontAwesomeIcon
-                          className='block text-3xl'
+                          className='block text-3xl text-green-300'
                           icon={regularHeart}
                         />
                       )}
