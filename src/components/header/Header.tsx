@@ -6,6 +6,7 @@ import { toggleDarkMode } from "@/store/slices/darkModeSlice";
 import { RootState } from "@/store/store";
 import DarkModeButton from "../ui/DarkModeButton";
 import { HeaderLinksDataTypes } from "@/types";
+
 const Header = () => {
   const dispatch = useDispatch();
   const isDarkMode = useSelector(
@@ -13,12 +14,25 @@ const Header = () => {
   );
 
   useEffect(() => {
+    // Check if the user has already toggled the theme
+    const prefersDarkScheme = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    // Apply the system's dark mode if no custom preference is set
+    if (isDarkMode === null) {
+      if (prefersDarkScheme) {
+        dispatch(toggleDarkMode());
+      }
+    }
+
+    // Sync the body class with the state
     if (isDarkMode) {
       document.body.classList.add("dark");
     } else {
       document.body.classList.remove("dark");
     }
-  }, [isDarkMode]);
+  }, [isDarkMode, dispatch]);
 
   const handleDarkModeToggle = () => {
     dispatch(toggleDarkMode());
@@ -28,6 +42,7 @@ const Header = () => {
     { id: 0, text: "Home", href: "/" },
     { id: 1, text: "Favorites", href: "/favorites" },
   ];
+
   return (
     <header className='header sm:py-8 py-4 dark:bg-dark dark:text-muted bg-offWhite text-dark'>
       <div className='wrapper'>
@@ -64,4 +79,5 @@ const Header = () => {
     </header>
   );
 };
+
 export default Header;

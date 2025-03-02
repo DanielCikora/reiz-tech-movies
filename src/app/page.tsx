@@ -1,7 +1,7 @@
 import Movies from "@/components/movies/Movies";
 import type { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "Reiz Tech Movies App",
+  title: "Reiz Tech Movies",
   description:
     "Reiz Tech Movies App - Internship Task developed by Daniel Cikora",
   icons: "/images/reiz-tech-logo.png",
