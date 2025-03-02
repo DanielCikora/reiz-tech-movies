@@ -186,7 +186,7 @@ const Movies = () => {
   return (
     <section className='movies min-h-dvh'>
       <div className='wrapper'>
-        <section className='filtering-section py-10 flex md:flex-row flex-col sm:items-center gap-4'>
+        <section className='filtering-section py-10 flex md:flex-row flex-col sm:items-center lg:gap-4 gap-2'>
           <Sorting sortType={sortType} onChange={handleSortChange} />
           <Filters
             genres={genres}
