@@ -2,7 +2,7 @@
 
 Developed by: `Daniel Cikora` as a task for `Reiz Tech`
 
-Tech used: `Next.js, Tailwind.css, Redux.js`
+Tech used: `Next.js, Redux.js, Tailwind.css.`
 
 First install all the dependencies with `npm install`.
 
