@@ -31,12 +31,12 @@ export default function RootLayout({
       <body>
         <Provider store={store}>
           {loading ? (
-            <section className='w-dvw h-dvh grid place-items-center bg-offWhite dark:bg-dark'>
+            <section className='w-dvw h-dvh grid place-items-center'>
               <div className='loader'></div>
             </section>
           ) : (
             <div
-              className={`transition-opacity duration-1000 bg-offWhite dark:bg-dark ${
+              className={`transition-opacity duration-1000 ${
                 fadeIn ? "opacity-100" : "opacity-0"
               }`}
             >
