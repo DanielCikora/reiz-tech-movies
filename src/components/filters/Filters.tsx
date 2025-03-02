@@ -41,7 +41,7 @@ const Filters = ({
         >
           Genre Filter ( {genreCounter} )
           <div
-            className={`filter-content absolute z-50 md:left-0 left-[50%] md:-translate-x-[0] -translate-x-[50%] top-12 rounded px-4 overflow-y-auto max-h-[300px] w-full flex flex-col gap-2 dark:bg-gray-700 bg-offWhite transition-all duration-700 ease-in-out ${
+            className={`filter-content absolute z-50 md:left-0 left-[50%] md:-translate-x-[0] -translate-x-[50%] top-10 rounded px-4 overflow-y-auto max-h-[300px] w-full flex flex-col gap-2 dark:bg-gray-700 bg-offWhite transition-all duration-700 ease-in-out ${
               genreClick
                 ? "h-[1200px] py-4 border border-solid border-dark"
                 : "h-0"
@@ -80,7 +80,7 @@ const Filters = ({
         >
           Status Filter
           <div
-            className={`filter-content absolute z-20 md:left-0 left-[50%] md:-translate-x-[0] -translate-x-[50%] top-12 rounded px-4 overflow-y-auto max-h-fit w-full sm:max-w-[300px] flex flex-col gap-2 dark:bg-gray-700 bg-offWhite transition-all duration-700 ease-in-out ${
+            className={`filter-content absolute z-20 md:left-0 left-[50%] md:-translate-x-[0] -translate-x-[50%] top-10 rounded px-4 overflow-y-auto max-h-fit w-full sm:max-w-[300px] flex flex-col gap-2 dark:bg-gray-700 bg-offWhite transition-all duration-700 ease-in-out ${
               statusClick
                 ? "h-[200px] py-4 border border-solid border-dark"
                 : "h-0"
