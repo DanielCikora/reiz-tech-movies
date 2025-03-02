@@ -15,7 +15,6 @@ const Favorites = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const isFavorite = useSelector((state: RootState) => state.favorites.movies);
-  const icon = isFavorite ? solidHeart : regularHeart;
 
   useEffect(() => {
     if (typeof window !== "undefined") {

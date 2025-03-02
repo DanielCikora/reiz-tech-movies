@@ -21,6 +21,7 @@ export interface DarkModeDataTypes {
 }
 export interface SortingDataTypes {
   onChange: ChangeEventHandler<HTMLSelectElement>;
+  sortType: string;
 }
 export interface MoviesDataTypes {
   id: number;

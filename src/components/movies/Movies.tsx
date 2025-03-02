@@ -23,7 +23,7 @@ const Movies = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [sortType, setSortType] = useState<string>("name");
-
+  const [genreCounter, setGenreCounter] = useState<number>(0);
   const dispatch = useDispatch();
   const favorites = useSelector((state: RootState) => state.favorites.movies);
 
@@ -113,6 +113,13 @@ const Movies = () => {
       updateMovies(allMovies, updatedGenres, selectedStatus, 1, sortType);
       return updatedGenres;
     });
+    setGenreCounter((prevCounter) => {
+      if (selectedGenres.includes(genre)) {
+        return prevCounter - 1;
+      } else {
+        return prevCounter + 1;
+      }
+    });
   };
 
   const handleStatusSelection = (status: string) => {
@@ -172,14 +179,15 @@ const Movies = () => {
     setSelectedGenres([]);
     setSelectedStatus("");
     setSortType("all");
-    updateMovies(allMovies, [], "", 1, sortType);
+    updateMovies(allMovies, [], "", 1, "all");
+    setGenreCounter(0);
   };
 
   return (
     <section className='movies min-h-dvh'>
       <div className='wrapper'>
         <section className='filtering-section py-10 flex md:flex-row flex-col md:items-center gap-4'>
-          <Sorting onChange={handleSortChange} />
+          <Sorting sortType={sortType} onChange={handleSortChange} />
           <Filters
             genres={genres}
             selectedGenres={selectedGenres}
@@ -188,6 +196,7 @@ const Movies = () => {
             selectedStatus={selectedStatus}
             onStatusChange={handleStatusSelection}
             onClearFilters={handleClearFilters}
+            genreCounter={genreCounter}
           />
         </section>
         <div className='grid lg:grid-cols-2 grid-cols-1 place-items-center gap-8 w-full mb-20'>

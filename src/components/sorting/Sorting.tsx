@@ -1,9 +1,10 @@
 import { SortingDataTypes } from "@/types";
-const Sorting: React.FC<SortingDataTypes> = ({ onChange }) => {
+const Sorting: React.FC<SortingDataTypes> = ({ onChange, sortType }) => {
   return (
     <select
-      className='w-full text-center sm:max-w-[200px] max-w-full dark:bg-gray-700 bg-transparent cursor-pointer border border-solid border-dark dark:text-offWhite  relative z-10 rounded py-[10px] font-semibold'
+      className='w-full text-center sm:max-w-[300px] max-w-full dark:bg-gray-700 bg-transparent cursor-pointer border border-solid border-dark dark:text-offWhite  relative z-10 rounded py-[10px] font-semibold'
       onChange={onChange}
+      value={sortType}
     >
       <option value='all'>No sort</option>
       <option value='name-asc'>Name Ascending</option>
