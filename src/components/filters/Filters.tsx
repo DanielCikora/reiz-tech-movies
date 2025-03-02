@@ -29,7 +29,7 @@ const Filters = ({
   };
   return (
     <div className='filtering-content'>
-      <div className='filter-buttons flex w-full md:flex-row flex-col gap-4'>
+      <div className='filter-buttons flex w-full text-nowrap md:flex-row flex-col items-center gap-4'>
         <button
           className='w-full sm:max-w-[200px] max-w-full hover:bg-green-500 hover:dark:bg-green-500 transition-all duration-200 ease-in-out dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative z-10  rounded p-2 font-semibold'
           type='button'

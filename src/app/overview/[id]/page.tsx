@@ -44,7 +44,12 @@ const MovieOverview = () => {
     }
   };
 
-  if (loading) return <h1 className='text-center m-auto'>Loading...</h1>;
+  if (loading)
+    return (
+      <div className='grid w-dvw h-dvh place-items-center'>
+        <div className='loader'></div>
+      </div>
+    );
 
   if (!movie)
     return (
