@@ -7,6 +7,7 @@ import Header from "@/components/header/Header";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "@/components/footer/Footer";
 import { useEffect, useState } from "react";
+import Head from "next/head"; // Import Head component for setting metadata
 
 export default function RootLayout({
   children,
@@ -29,6 +30,17 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
+        {/* Set global metadata using Head component */}
+        <Head>
+          <title>Reiz Tech Movies</title>
+          <meta
+            name='description'
+            content='Reiz Tech Movies App - Internship Task developed by Daniel Cikora'
+          />
+          <meta name='viewport' content='width=device-width, initial-scale=1' />
+          <link rel='icon' href='/images/reiz-tech-logo.png' />
+        </Head>
+
         <Provider store={store}>
           {loading ? (
             <section className='w-dvw h-dvh grid place-items-center'>
