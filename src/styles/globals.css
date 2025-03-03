@@ -35,7 +35,7 @@ body {
     var(--c1) bottom left;
   background-size: 50% 50%;
   background-repeat: no-repeat;
-  animation: l37 1.6s infinite;
+  animation: l37 1.8s infinite;
 }
 @keyframes l37 {
   80%,

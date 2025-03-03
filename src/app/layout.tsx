@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   const [loading, setLoading] = useState<boolean>(true);
   const [fadeIn, setFadeIn] = useState<boolean>(false);
-  const loadingDuration: number = 3000;
+  const loadingDuration: number = 1500;
   const fadeInDelayDuration: number = 100;
 
   useEffect(() => {

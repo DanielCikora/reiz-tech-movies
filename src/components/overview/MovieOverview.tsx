@@ -61,7 +61,7 @@ const MovieOverview = () => {
         <div className='overview-content flex gap-6 md:flex-row flex-col w-full'>
           <div className=''>
             <img
-              className='block w-full h-auto lg:max-w-full max-w-[800px] md:mb-0 mb-10'
+              className='block w-full h-auto md:max-w-[800px] max-w-[600px] md:mx-0 mx-auto md:mb-0 mb-10'
               src={movie.image.original}
               alt={movie.name}
             />

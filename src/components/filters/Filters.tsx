@@ -33,8 +33,8 @@ const Filters = ({
 }: FiltersDataTypes & { onClearFilters: () => void }) => {
   const [genreClick, setGenreClick] = useState<boolean>(false);
   const [statusClick, setStatusClick] = useState<boolean>(false);
-  const genreRef = useRef<HTMLDivElement | null>(null);
-  const statusRef = useRef<HTMLDivElement | null>(null);
+  const genreRef = useRef<HTMLButtonElement | null>(null);
+  const statusRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -93,10 +93,10 @@ const Filters = ({
           } w-full max-w-[300px] hover:bg-green-500 hover:dark:bg-green-500 transition-all duration-100 ease-in-out dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative rounded p-2 font-semibold`}
           type='button'
           onClick={handleGenreClick}
+          ref={genreRef}
         >
           Genre Filter ( {genreCounter} )
           <div
-            ref={genreRef}
             className={`filter-content absolute z-50 md:left-0 left-[50%] md:-translate-x-[0] -translate-x-[50%] top-10 rounded px-4 overflow-y-auto max-h-[300px] w-full flex flex-col gap-2 dark:bg-gray-700 bg-offWhite transition-all duration-700 ease-in-out ${
               genreClick
                 ? "h-[1200px] py-4 border border-solid border-dark"
@@ -144,17 +144,16 @@ const Filters = ({
             ))}
           </div>
         </button>
-
         <button
           className={`md:text-md text-sm ${
             genreClick ? "z-40" : "z-20"
           } w-full max-w-[300px] hover:bg-green-500 hover:dark:bg-green-500 transition-all duration-100 dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative z-20 rounded p-2 font-semibold`}
           type='button'
+          ref={statusRef}
           onClick={handleStatusClick}
         >
           Status Filter
           <div
-            ref={statusRef}
             className={`filter-content absolute z-20 md:left-0 left-[50%] md:-translate-x-[0] -translate-x-[50%] top-10 rounded px-4 overflow-y-auto max-h-fit w-full sm:max-w-[300px] flex flex-col gap-2 dark:bg-gray-700 bg-offWhite transition-all duration-700 ease-in-out ${
               statusClick
                 ? "h-[300px] py-4 border border-solid border-dark"
