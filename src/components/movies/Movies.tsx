@@ -55,6 +55,10 @@ const Movies = () => {
     );
   };
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
+
   const sortMovies = (moviesList: MoviesDataTypes[], sortOption: string) => {
     if (sortOption === "all") return moviesList;
     return [...moviesList].sort((a, b) => {
@@ -322,11 +326,11 @@ const Movies = () => {
             ))}
           </div>
         )}
-        <div className='pagination-controls flex justify-center items-center gap-2 pb-10'>
+        <div className='pagination-controls flex md:flex-row flex-col justify-center items-center gap-2 pb-10'>
           <button
             onClick={() => handlePageClick(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`font-semibold w-20 h-10 mx-1 rounded-md ${
+            className={`font-semibold px-2 h-10 mx-1 rounded-md ${
               currentPage === 1
                 ? "bg-gray-500 cursor-not-allowed"
                 : "bg-gray-800 hover:bg-green-500"
@@ -334,24 +338,26 @@ const Movies = () => {
           >
             Prev
           </button>
-          {getPageNumbers().map((page) => (
-            <button
-              key={page}
-              onClick={() => handlePageClick(page)}
-              disabled={page === currentPage}
-              className={`font-semibold w-10 h-10 mx-1 rounded-md ${
-                page === currentPage
-                  ? "bg-green-500 text-black"
-                  : "bg-gray-800 text-white hover:bg-green-500"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
+          <div className='flex gap-2 items-center flex-wrap'>
+            {getPageNumbers().map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageClick(page)}
+                disabled={page === currentPage}
+                className={`font-semibold w-10 px-1 h-10 mx-1 rounded-md ${
+                  page === currentPage
+                    ? "bg-green-500 text-black"
+                    : "bg-gray-800 text-white hover:bg-green-500"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
           <button
             onClick={() => handlePageClick(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`font-semibold w-20 h-10 mx-1 rounded-md ${
+            className={`font-semibold px-2 h-10 mx-1 rounded-md ${
               currentPage === totalPages
                 ? "bg-gray-500 cursor-not-allowed"
                 : "bg-gray-800 hover:bg-green-500"
