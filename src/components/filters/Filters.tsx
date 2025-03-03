@@ -44,9 +44,9 @@ const Filters = ({
   };
   return (
     <section className='filtering-section py-10 flex md:flex-row flex-col sm:items-center lg:gap-4 gap-2 w-full'>
-      <div className='filtering-content flex w-full text-nowrap md:flex-row flex-col items-start md:items-center lg:gap-4 gap-2'>
+      <div className='filtering-content flex w-full text-nowrap md:flex-row flex-col md:items-start sm:items-start items-center lg:gap-4 gap-2'>
         <select
-          className='md:text-md text-sm w-full text-center lg:max-w-[300px] md:max-w-[200px] sm:max-w-[300px] max-w-full  dark:bg-gray-700 bg-transparent cursor-pointer border border-solid border-dark dark:text-offWhite relative z-10 rounded py-[8px] font-semibold'
+          className='md:text-md text-sm w-full text-center lg:max-w-[300px] md:max-w-[200px] max-w-[300px]  dark:bg-gray-700 bg-transparent cursor-pointer border border-solid border-dark dark:text-offWhite relative z-10 rounded py-[8px] font-semibold'
           onChange={onChange}
           value={sortType}
         >
@@ -59,7 +59,7 @@ const Filters = ({
         <button
           className={`md:text-md text-sm ${
             genreClick ? "z-50" : "z-20"
-          } w-full sm:max-w-[300px] max-w-full hover:bg-green-500 hover:dark:bg-green-500 transition-all duration-100 ease-in-out dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative rounded p-2 font-semibold`}
+          } w-full max-w-[300px] hover:bg-green-500 hover:dark:bg-green-500 transition-all duration-100 ease-in-out dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative rounded p-2 font-semibold`}
           type='button'
           onClick={handleGenreClick}
         >
@@ -115,7 +115,7 @@ const Filters = ({
         <button
           className={`md:text-md text-sm ${
             genreClick ? "z-40" : "z-20"
-          } w-full sm:max-w-[300px] max-w-full hover:bg-green-500 hover:dark:bg-green-500 transition-all duration-100 dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative z-20 rounded p-2 font-semibold`}
+          } w-full max-w-[300px] hover:bg-green-500 hover:dark:bg-green-500 transition-all duration-100 dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative z-20 rounded p-2 font-semibold`}
           type='button'
           onClick={handleStatusClick}
         >
@@ -123,7 +123,7 @@ const Filters = ({
           <div
             className={`filter-content absolute z-20 md:left-0 left-[50%] md:-translate-x-[0] -translate-x-[50%] top-10 rounded px-4 overflow-y-auto max-h-fit w-full sm:max-w-[300px] flex flex-col gap-2 dark:bg-gray-700 bg-offWhite transition-all duration-700 ease-in-out ${
               statusClick
-                ? "h-[200px] py-4 border border-solid border-dark"
+                ? "h-[300px] py-4 border border-solid border-dark"
                 : "h-0"
             } `}
           >
@@ -173,14 +173,14 @@ const Filters = ({
           </div>
         </button>
         <button
-          className='md:text-md text-sm w-full sm:max-w-[300px] max-w-full hover:bg-green-500 hover:dark:bg-green-500 transition-all duration-100 dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative rounded p-2 font-semibold'
+          className='md:text-md text-sm w-full max-w-[300px] hover:bg-green-500 hover:dark:bg-green-500 transition-all duration-100 dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative rounded p-2 font-semibold'
           type='button'
           onClick={handleClearFilters}
         >
           Reset All Filters
         </button>
         <select
-          className='sm:mx-0 mx-auto text-center md:text-md text-sm w-full max-w-fit dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative rounded p-2 font-semibold'
+          className='text-center md:text-md text-sm w-full max-w-fit dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative rounded p-2 font-semibold'
           onChange={perViewChange}
           value={perViewValue}
         >
