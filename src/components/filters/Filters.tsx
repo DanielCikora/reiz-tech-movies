@@ -10,6 +10,8 @@ interface FiltersDataTypes {
   genreCounter: number;
   onChange: ChangeEventHandler<HTMLSelectElement>;
   sortType: string;
+  perViewChange: ChangeEventHandler<HTMLSelectElement>;
+  perViewValue: number;
 }
 const Filters = ({
   genres,
@@ -22,6 +24,8 @@ const Filters = ({
   genreCounter,
   onChange,
   sortType,
+  perViewChange,
+  perViewValue,
 }: FiltersDataTypes & { onClearFilters: () => void }) => {
   const [genreClick, setGenreClick] = useState<boolean>(false);
   const [statusClick, setStatusClick] = useState<boolean>(false);
@@ -175,6 +179,17 @@ const Filters = ({
         >
           Reset All Filters
         </button>
+        <select
+          className='sm:mx-0 mx-auto text-center md:text-md text-sm w-full max-w-fit dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative rounded p-2 font-semibold'
+          onChange={perViewChange}
+          value={perViewValue}
+        >
+          <option value={6}>6</option>
+          <option value={12}>12</option>
+          <option value={18}>18</option>
+          <option value={24}>24</option>
+          <option value={30}>30</option>
+        </select>
       </div>
     </section>
   );

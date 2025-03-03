@@ -61,11 +61,11 @@ const Favorites = () => {
   return (
     <section className='favorites pt-24 min-h-dvh dark:bg-dark dark:text-muted bg-offWhite text-dark'>
       <div className='wrapper'>
-        <h2 className='md:text-3xl sm:text-2xl text-xl font-bold mb-4 md:text-left text-center'>
+        <h1 className='md:text-4xl sm:text-3xl text-2xl font-bold mb-20 text-center'>
           Favorites
-        </h2>
+        </h1>
         {favorites.length === 0 ? (
-          <h1 className='text-center m-auto'>No favorites added yet.</h1>
+          <h2 className='text-center m-auto'>No favorites added yet.</h2>
         ) : (
           <div className='grid lg:grid-cols-2 grid-cols-1 gap-8'>
             {favorites.map((movie) => (

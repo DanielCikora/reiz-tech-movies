@@ -23,6 +23,8 @@ const Movies = () => {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [sortType, setSortType] = useState<string>("name");
   const [genreCounter, setGenreCounter] = useState<number>(0);
+  const [moviesPerView, setMoviesPerView] = useState<number>(6);
+
   const dispatch = useDispatch();
   const favorites = useSelector((state: RootState) => state.favorites.movies);
 
@@ -42,7 +44,14 @@ const Movies = () => {
     });
     setGenres(Array.from(allGenres));
     setStatuses(Array.from(allStatuses));
-    updateMovies(fetchedMovies, selectedGenres, selectedStatus, 1, sortType);
+    updateMovies(
+      fetchedMovies,
+      selectedGenres,
+      selectedStatus,
+      1,
+      sortType,
+      moviesPerView
+    );
   };
 
   const sortMovies = (moviesList: MoviesDataTypes[], sortOption: string) => {
@@ -72,7 +81,8 @@ const Movies = () => {
     filters: string[],
     status: string,
     page: number,
-    sortOption: string
+    sortOption: string,
+    moviesPerView: number
   ) => {
     let filteredMovies = moviesList;
 
@@ -89,19 +99,24 @@ const Movies = () => {
     }
 
     const sortedMovies = sortMovies(filteredMovies, sortOption);
-
-    const moviesPerPage: number = 6;
-    const startIndex = (page - 1) * moviesPerPage;
-    const endIndex = page * moviesPerPage;
+    const startIndex = (page - 1) * moviesPerView;
+    const endIndex = page * moviesPerView;
     setMovies(sortedMovies.slice(startIndex, endIndex));
-    setTotalPages(Math.ceil(sortedMovies.length / moviesPerPage));
+    setTotalPages(Math.ceil(sortedMovies.length / moviesPerView));
     setCurrentPage(page);
   };
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newSortOption = e.target.value;
     setSortType(newSortOption);
-    updateMovies(allMovies, selectedGenres, selectedStatus, 1, newSortOption);
+    updateMovies(
+      allMovies,
+      selectedGenres,
+      selectedStatus,
+      1,
+      newSortOption,
+      moviesPerView
+    );
   };
 
   const handleGenreSelection = (genre: string) => {
@@ -128,7 +143,7 @@ const Movies = () => {
   };
   const handleStatusSelection = (status: string) => {
     setSelectedStatus(status === "all" ? "" : status);
-    updateMovies(allMovies, selectedGenres, status, 1, sortType);
+    updateMovies(allMovies, selectedGenres, status, 1, sortType, moviesPerView);
   };
 
   useEffect(() => {
@@ -136,7 +151,14 @@ const Movies = () => {
   }, []);
 
   useEffect(() => {
-    updateMovies(allMovies, selectedGenres, selectedStatus, 1, sortType);
+    updateMovies(
+      allMovies,
+      selectedGenres,
+      selectedStatus,
+      1,
+      sortType,
+      moviesPerView
+    );
   }, [selectedGenres, selectedStatus, sortType, allMovies]);
 
   const sanitizeHTML = (html?: string) => {
@@ -150,7 +172,8 @@ const Movies = () => {
         selectedGenres,
         selectedStatus,
         pageNumber,
-        sortType
+        sortType,
+        moviesPerView
       );
     }
   };
@@ -183,8 +206,22 @@ const Movies = () => {
     setSelectedGenres([]);
     setSelectedStatus("");
     setSortType("all");
-    updateMovies(allMovies, [], "", 1, "all");
+    updateMovies(allMovies, [], "", 1, "all", moviesPerView);
     setGenreCounter(0);
+    setMoviesPerView(6);
+  };
+
+  const handlePerViewChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newMoviesPerView = parseInt(event.target.value, 10);
+    setMoviesPerView(newMoviesPerView);
+    updateMovies(
+      allMovies,
+      selectedGenres,
+      selectedStatus,
+      1,
+      sortType,
+      newMoviesPerView
+    );
   };
 
   return (
@@ -201,9 +238,11 @@ const Movies = () => {
           genreCounter={genreCounter}
           sortType={sortType}
           onChange={handleSortChange}
+          perViewChange={handlePerViewChange}
+          perViewValue={moviesPerView}
         />
         {movies.length === 0 ? (
-          <div className='grid justify-items-center w-dvw h-dvh pt-52'>
+          <div className='grid justify-items-center w-full h-dvh pt-52'>
             <h2 className='text-3xl font-semibold'>No Movies Found!</h2>
           </div>
         ) : (
