@@ -52,9 +52,11 @@ const Favorites = () => {
   };
 
   return (
-    <section className='favorites min-h-dvh dark:bg-dark dark:text-muted bg-offWhite text-dark'>
+    <section className='favorites pt-24 min-h-dvh dark:bg-dark dark:text-muted bg-offWhite text-dark'>
       <div className='wrapper'>
-        <h2 className='md:text-3xl text-2xl font-bold mb-4 pl-4'>Favorites</h2>
+        <h2 className='md:text-3xl sm:text-2xl text-xl font-bold mb-4 md:text-left text-center'>
+          Favorites
+        </h2>
         {favorites.length === 0 ? (
           <h1 className='text-center m-auto'>No favorites added yet.</h1>
         ) : (
@@ -71,7 +73,7 @@ const Favorites = () => {
                   alt={movie.name}
                 />
                 <div className='movie__description w-full flex flex-col justify-between'>
-                  <span>
+                  <span className='mb-10'>
                     <span className='flex justify-between'>
                       <h2 className='mb-8 text-2xl font-semibold'>
                         {movie.name}
@@ -107,16 +109,20 @@ const Favorites = () => {
                       }}
                     />
                   </span>
-                  <span className='flex flex-col gap-1'>
-                    <h5>Rating</h5>
-                    <span className='flex justify-between w-full '>
+                  <span className='flex w-full justify-between gap-4'>
+                    <span className='flex flex-col h-fit w-fit text-nowrap'>
+                      <h5 className='text-lg font-semibold'>Rating</h5>
                       {movie.rating.average ? (
-                        <p>{movie.rating.average} / 10</p>
+                        <p className='text-md font-medium'>
+                          {movie.rating.average} / 10
+                        </p>
                       ) : (
-                        <p>No Rating</p>
+                        <p className='text-md font-medium'>No Rating</p>
                       )}
-                      {movie.genres.join(", ")}
                     </span>
+                    <p className='text-md font-medium text-wrap w-fit'>
+                      {movie.genres.join(", ")}
+                    </p>
                   </span>
                 </div>
               </Link>

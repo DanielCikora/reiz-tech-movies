@@ -71,22 +71,24 @@ const MovieOverview = () => {
               alt={movie.name}
             />
             <div className='md:hidden flex flex-col gap-4 mb-10'>
-              <h2 className='text-3xl font-bold mb-2'>{movie.name}</h2>
+              <h2 className='text-3xl font-bold mb-2 text-center'>
+                {movie.name}
+              </h2>
               <button
                 onClick={handleToggleFavorite}
-                className='z-10 top-0 right-0 flex items-center gap-2'
+                className='z-10 top-0 right-0 flex items-center gap-2 mx-auto'
                 type='button'
               >
-                <p className='text-xl nice-underline hover:no-underline hover:text-green-500 underline'>
+                <p className='text-lg nice-underline hover:no-underline hover:text-green-500 underline'>
                   {buttonText}
                 </p>
               </button>
               <p
-                className='text-xl'
+                className='md:text-xl text-md'
                 dangerouslySetInnerHTML={{ __html: movie.summary }}
               />
             </div>
-            <div className='lg:hidden block text-lg'>
+            <div className='lg:hidden block text-md'>
               <p>Premiered: {movie.premiered}</p>
               <p>Ended: {movie.ended}</p>
               <p>Average runtime: {movie.runtime} minutes</p>
@@ -106,7 +108,7 @@ const MovieOverview = () => {
             </div>
           </div>
           <div className='w-full flex flex-col justify-between max-w-[800px]'>
-            <div className='md:flex hidden flex-col gap-4'>
+            <div className='md:flex hidden flex-col gap-4 mb-10'>
               <h2 className='text-3xl font-bold mb-2'>{movie.name}</h2>
               <button
                 onClick={handleToggleFavorite}
@@ -118,7 +120,7 @@ const MovieOverview = () => {
                 </p>
               </button>
               <p
-                className='text-xl'
+                className='md:text-xl text-md'
                 dangerouslySetInnerHTML={{ __html: movie.summary }}
               />
             </div>

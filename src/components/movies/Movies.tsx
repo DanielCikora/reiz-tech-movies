@@ -188,7 +188,7 @@ const Movies = () => {
   };
 
   return (
-    <section className='movies min-h-dvh'>
+    <section className='movies min-h-dvh pt-20'>
       <div className='wrapper'>
         <Filters
           genres={genres}
@@ -225,7 +225,7 @@ const Movies = () => {
                   />
                 </div>
                 <div className='movie__description w-full flex flex-col justify-between'>
-                  <span>
+                  <span className='mb-10'>
                     <span className='flex justify-between'>
                       <h2 className='mb-8 text-2xl font-semibold'>
                         {movie.name}
@@ -261,16 +261,20 @@ const Movies = () => {
                       }}
                     />
                   </span>
-                  <span className='flex flex-col gap-1'>
-                    <h5>Rating</h5>
-                    <span className='flex justify-between w-full '>
+                  <span className='flex w-full justify-between gap-4'>
+                    <span className='flex flex-col h-fit w-fit text-nowrap'>
+                      <h5 className='text-lg font-semibold'>Rating</h5>
                       {movie.rating.average ? (
-                        <p>{movie.rating.average} / 10</p>
+                        <p className='text-md font-medium'>
+                          {movie.rating.average} / 10
+                        </p>
                       ) : (
-                        <p>No Rating</p>
+                        <p className='text-md font-medium'>No Rating</p>
                       )}
-                      {movie.genres.join(", ")}
                     </span>
+                    <p className='text-md font-medium text-wrap w-fit'>
+                      {movie.genres.join(", ")}
+                    </p>
                   </span>
                 </div>
               </Link>
