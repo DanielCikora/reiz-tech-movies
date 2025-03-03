@@ -260,7 +260,7 @@ const Movies = () => {
                 onClick={(e) => {
                   if (e.defaultPrevented) return;
                 }}
-                className='cursor-pointer rounded hover:shadow-2xl hover:shadow-gray-400 shadow-inherit transition-all duration-200 ease-in-out p-4 w-full h-full flex md:flex-row flex-col gap-4'
+                className='cursor-pointer md:border-none border border-solid border-dark dark:border-offWhite rounded hover:shadow-2xl hover:shadow-gray-400 shadow-inherit transition-all duration-200 ease-in-out p-4 w-full h-full flex md:flex-row flex-col gap-4'
               >
                 <div className='movie__image w-full md:max-w-80'>
                   <img
