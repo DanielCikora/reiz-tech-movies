@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 interface FiltersDataTypes {
   genres: string[];
   selectedGenres: string[];
@@ -8,6 +8,8 @@ interface FiltersDataTypes {
   selectedStatus: string;
   onStatusChange: (status: string) => void;
   genreCounter: number;
+  onChange: ChangeEventHandler<HTMLSelectElement>;
+  sortType: string;
 }
 const Filters = ({
   genres,
@@ -18,6 +20,8 @@ const Filters = ({
   onStatusChange,
   onClearFilters,
   genreCounter,
+  onChange,
+  sortType,
 }: FiltersDataTypes & { onClearFilters: () => void }) => {
   const [genreClick, setGenreClick] = useState<boolean>(false);
   const [statusClick, setStatusClick] = useState<boolean>(false);
@@ -29,9 +33,25 @@ const Filters = ({
     setStatusClick((prevGenreClick) => !prevGenreClick);
     setGenreClick(false);
   };
+  const handleClearFilters = () => {
+    onClearFilters();
+    setGenreClick(false);
+    setStatusClick(false);
+  };
   return (
-    <div className='filtering-content w-full'>
-      <div className='filter-buttons flex w-full text-nowrap md:flex-row flex-col items-center lg:gap-4 gap-2'>
+    <section className='filtering-section py-10 flex md:flex-row flex-col sm:items-center lg:gap-4 gap-2 w-full'>
+      <div className='filtering-content flex w-full text-nowrap md:flex-row flex-col items-start md:items-center lg:gap-4 gap-2'>
+        <select
+          className='md:text-md text-sm w-full text-center lg:max-w-[300px] md:max-w-[200px] sm:max-w-[300px] max-w-full  dark:bg-gray-700 bg-transparent cursor-pointer border border-solid border-dark dark:text-offWhite relative z-10 rounded py-[8px] font-semibold'
+          onChange={onChange}
+          value={sortType}
+        >
+          <option value='all'>No sort</option>
+          <option value='name-asc'>Name Ascending</option>
+          <option value='name-desc'>Name Descending</option>
+          <option value='premiered-asc'>Premiered Ascending</option>
+          <option value='premiered-desc'>Premiered Descending</option>
+        </select>
         <button
           className={`md:text-md text-sm ${
             genreClick ? "z-50" : "z-20"
@@ -47,6 +67,23 @@ const Filters = ({
                 : "h-0"
             } `}
           >
+            <label className='flex justify-end gap-2 cursor-pointer'>
+              <input
+                type='checkbox'
+                checked={selectedGenres.length === 0}
+                onChange={() => onGenreChange("all")}
+                className='hidden'
+              />
+              <span
+                className={`md:text-md text-sm hover:bg-green-500 hover:dark:bg-green-500 duration-100 lg:px-4 px-2 py-2 dark:text-offWhite w-full text-center rounded-md border cursor-pointer transition-all ${
+                  selectedGenres.length === 0
+                    ? "bg-green-500"
+                    : "dark:bg-gray-800 border border-dark border-solid dark:text-offWhite"
+                }`}
+              >
+                All
+              </span>
+            </label>
             {genres.map((genre) => (
               <label
                 key={genre}
@@ -86,6 +123,25 @@ const Filters = ({
                 : "h-0"
             } `}
           >
+            <label className='flex justify-start w-full gap-2 cursor-pointer'>
+              <input
+                type='radio'
+                name='status'
+                value=''
+                checked={selectedStatus === ""}
+                onChange={() => onStatusChange("")}
+                className='hidden'
+              />
+              <span
+                className={`md:text-md text-sm hover:bg-green-500 hover:dark:bg-green-500 duration-100 lg:px-4 px-2 dark:text-offWhite py-2 w-full text-center rounded-md border cursor-pointer transition-all ${
+                  selectedStatus === ""
+                    ? "bg-green-500"
+                    : "dark:bg-gray-800 border border-dark border-solid dark:text-offWhite"
+                }`}
+              >
+                All
+              </span>
+            </label>
             {statuses.map((status) => (
               <label
                 key={status}
@@ -115,12 +171,12 @@ const Filters = ({
         <button
           className='md:text-md text-sm w-full sm:max-w-[300px] max-w-full hover:bg-green-500 hover:dark:bg-green-500 transition-all duration-100 dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative rounded p-2 font-semibold'
           type='button'
-          onClick={onClearFilters}
+          onClick={handleClearFilters}
         >
           Reset All Filters
         </button>
       </div>
-    </div>
+    </section>
   );
 };
 export default Filters;

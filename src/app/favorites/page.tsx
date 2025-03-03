@@ -110,7 +110,11 @@ const Favorites = () => {
                   <span className='flex flex-col gap-1'>
                     <h5>Rating</h5>
                     <span className='flex justify-between w-full '>
-                      <p>{movie.rating.average} / 10</p>
+                      {movie.rating.average ? (
+                        <p>{movie.rating.average} / 10</p>
+                      ) : (
+                        <p>No Rating</p>
+                      )}
                       {movie.genres.join(", ")}
                     </span>
                   </span>

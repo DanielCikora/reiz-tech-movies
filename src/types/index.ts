@@ -19,10 +19,6 @@ export interface DarkModeButtonDataTypes {
 export interface DarkModeDataTypes {
   isDarkMode: boolean;
 }
-export interface SortingDataTypes {
-  onChange: ChangeEventHandler<HTMLSelectElement>;
-  sortType: string;
-}
 export interface MoviesDataTypes {
   id: number;
   url: string;

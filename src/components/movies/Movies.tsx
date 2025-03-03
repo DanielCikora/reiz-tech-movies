@@ -8,7 +8,6 @@ import Filters from "../filters/Filters";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
-import Sorting from "../sorting/Sorting";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { toggleFavorite } from "@/store/slices/favoritesSlice";
@@ -36,6 +35,7 @@ const Movies = () => {
 
     const allGenres = new Set<string>();
     const allStatuses = new Set<string>();
+
     fetchedMovies.forEach((movie) => {
       movie.genres.forEach((genre) => allGenres.add(genre));
       allStatuses.add(movie.status);
@@ -76,13 +76,13 @@ const Movies = () => {
   ) => {
     let filteredMovies = moviesList;
 
-    if (filters.length > 0) {
+    if (filters.length > 0 && !filters.includes("all")) {
       filteredMovies = moviesList.filter((movie) =>
         filters.every((filter) => movie.genres.includes(filter))
       );
     }
 
-    if (status) {
+    if (status && status !== "all") {
       filteredMovies = filteredMovies.filter(
         (movie) => movie.status === status
       );
@@ -106,24 +106,28 @@ const Movies = () => {
 
   const handleGenreSelection = (genre: string) => {
     setSelectedGenres((prevGenres) => {
-      const updatedGenres = prevGenres.includes(genre)
+      let updatedGenres: string[];
+      let isSelected = prevGenres.includes(genre);
+
+      if (genre === "all") {
+        setGenreCounter(0);
+        return [];
+      }
+
+      updatedGenres = isSelected
         ? prevGenres.filter((g) => g !== genre)
         : [...prevGenres, genre];
 
-      updateMovies(allMovies, updatedGenres, selectedStatus, 1, sortType);
+      setGenreCounter((prevCounter) => {
+        const newCounter = isSelected ? prevCounter - 1 : prevCounter + 1;
+        return newCounter;
+      });
+
       return updatedGenres;
     });
-    setGenreCounter((prevCounter) => {
-      if (selectedGenres.includes(genre)) {
-        return prevCounter - 1;
-      } else {
-        return prevCounter + 1;
-      }
-    });
   };
-
   const handleStatusSelection = (status: string) => {
-    setSelectedStatus(status);
+    setSelectedStatus(status === "all" ? "" : status);
     updateMovies(allMovies, selectedGenres, status, 1, sortType);
   };
 
@@ -186,82 +190,94 @@ const Movies = () => {
   return (
     <section className='movies min-h-dvh'>
       <div className='wrapper'>
-        <section className='filtering-section py-10 flex md:flex-row flex-col sm:items-center lg:gap-4 gap-2'>
-          <Sorting sortType={sortType} onChange={handleSortChange} />
-          <Filters
-            genres={genres}
-            selectedGenres={selectedGenres}
-            onGenreChange={handleGenreSelection}
-            statuses={statuses}
-            selectedStatus={selectedStatus}
-            onStatusChange={handleStatusSelection}
-            onClearFilters={handleClearFilters}
-            genreCounter={genreCounter}
-          />
-        </section>
-        <div className='grid lg:grid-cols-2 grid-cols-1 place-items-center gap-8 w-full mb-20'>
-          {movies.map((movie) => (
-            <Link
-              href={`/overview/${movie.id}`}
-              key={movie.id}
-              onClick={(e) => {
-                if (e.defaultPrevented) return;
-              }}
-              className='cursor-pointer rounded hover:shadow-2xl hover:shadow-gray-400 shadow-inherit transition-all duration-200 ease-in-out p-4 w-full h-full flex md:flex-row flex-col gap-4'
-            >
-              <div className='movie__image w-full md:max-w-80'>
-                <img
-                  className='block w-full h-auto'
-                  src={movie.image.original}
-                  alt={movie.name}
-                />
-              </div>
-              <div className='movie__description w-full flex flex-col justify-between'>
-                <span>
-                  <span className='flex justify-between'>
-                    <h2 className='mb-8 text-2xl font-semibold'>
-                      {movie.name}
-                    </h2>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleToggleFavorite(movie);
-                      }}
-                      className='relative z-10 top-0 right-0 flex items-start'
-                      type='button'
-                    >
-                      {favorites.some((fav) => fav.id === movie.id) ? (
-                        <FontAwesomeIcon
-                          className='block text-3xl text-green-500'
-                          icon={solidHeart}
-                        />
-                      ) : (
-                        <FontAwesomeIcon
-                          className='block text-3xl text-green-500'
-                          icon={regularHeart}
-                        />
-                      )}
-                    </button>
-                  </span>
-                  <p
-                    className='mediumLarge:text-lg text-md'
-                    dangerouslySetInnerHTML={{
-                      __html: sanitizeHTML(`${movie.summary.slice(0, 100)}...`),
-                    }}
+        <Filters
+          genres={genres}
+          selectedGenres={selectedGenres}
+          onGenreChange={handleGenreSelection}
+          statuses={statuses}
+          selectedStatus={selectedStatus}
+          onStatusChange={handleStatusSelection}
+          onClearFilters={handleClearFilters}
+          genreCounter={genreCounter}
+          sortType={sortType}
+          onChange={handleSortChange}
+        />
+        {movies.length === 0 ? (
+          <div className='grid justify-items-center w-dvw h-dvh pt-52'>
+            <h2 className='text-3xl font-semibold'>No Movies Found!</h2>
+          </div>
+        ) : (
+          <div className='grid lg:grid-cols-2 grid-cols-1 place-items-center gap-8 w-full mb-20'>
+            {movies.map((movie) => (
+              <Link
+                href={`/overview/${movie.id}`}
+                key={movie.id}
+                onClick={(e) => {
+                  if (e.defaultPrevented) return;
+                }}
+                className='cursor-pointer rounded hover:shadow-2xl hover:shadow-gray-400 shadow-inherit transition-all duration-200 ease-in-out p-4 w-full h-full flex md:flex-row flex-col gap-4'
+              >
+                <div className='movie__image w-full md:max-w-80'>
+                  <img
+                    className='block w-full h-auto'
+                    src={movie.image.original}
+                    alt={movie.name}
                   />
-                </span>
-                <span className='flex flex-col gap-1'>
-                  <h5>Rating</h5>
-                  <span className='flex justify-between w-full '>
-                    <p>{movie.rating.average} / 10</p>
-                    {movie.genres.join(", ")}
+                </div>
+                <div className='movie__description w-full flex flex-col justify-between'>
+                  <span>
+                    <span className='flex justify-between'>
+                      <h2 className='mb-8 text-2xl font-semibold'>
+                        {movie.name}
+                      </h2>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleToggleFavorite(movie);
+                        }}
+                        className='relative z-10 top-0 right-0 flex items-start'
+                        type='button'
+                      >
+                        {favorites.some((fav) => fav.id === movie.id) ? (
+                          <FontAwesomeIcon
+                            className='block text-3xl text-green-500'
+                            icon={solidHeart}
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            className='block text-3xl text-green-500'
+                            icon={regularHeart}
+                          />
+                        )}
+                      </button>
+                    </span>
+                    <p
+                      className='mediumLarge:text-lg text-md'
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeHTML(
+                          `${movie.summary.slice(0, 100)}...`
+                        ),
+                      }}
+                    />
                   </span>
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
+                  <span className='flex flex-col gap-1'>
+                    <h5>Rating</h5>
+                    <span className='flex justify-between w-full '>
+                      {movie.rating.average ? (
+                        <p>{movie.rating.average} / 10</p>
+                      ) : (
+                        <p>No Rating</p>
+                      )}
+                      {movie.genres.join(", ")}
+                    </span>
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+
         <div className='pagination-controls flex justify-center pb-10'>
           {getPageNumbers().map((page) => (
             <button

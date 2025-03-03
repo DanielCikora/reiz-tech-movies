@@ -128,7 +128,12 @@ const MovieOverview = () => {
               <p>Average runtime: {movie.runtime} minutes</p>
               <p>Show status: {movie.status}</p>
               <p>Language: {movie.language}</p>
-              <p>Average rating: {movie.rating.average}</p>
+              {movie.rating.average ? (
+                <p>{movie.rating.average} / 10</p>
+              ) : (
+                <p>No Rating</p>
+              )}
+              {movie.genres.join(", ")}
               <p>
                 Official site:{" "}
                 <Link
