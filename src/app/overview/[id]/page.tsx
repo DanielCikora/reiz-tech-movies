@@ -1,4 +1,4 @@
-import MovieOverview from "@/components/overview/Overview";
+import MovieOverview from "@/components/overview/MovieOverview";
 import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Reiz Tech Movies",

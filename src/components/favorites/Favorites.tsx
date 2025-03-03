@@ -118,7 +118,7 @@ const Favorites = () => {
                   </span>
                   <span className='flex w-full justify-between gap-4'>
                     <span className='flex flex-col h-fit w-fit text-nowrap'>
-                      <h5 className='text-lg font-semibold'>Rating</h5>
+                      <h5 className='text-md font-medium'>Rating</h5>
                       {movie.rating.average ? (
                         <p className='text-md font-medium'>
                           {movie.rating.average} / 10

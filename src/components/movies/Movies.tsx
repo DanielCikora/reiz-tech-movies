@@ -28,6 +28,8 @@ const Movies = () => {
   const dispatch = useDispatch();
   const favorites = useSelector((state: RootState) => state.favorites.movies);
 
+  const movieAmount = allMovies.length;
+
   const fetchMovies = async () => {
     const response = await axios.get<MoviesDataTypes[]>(
       "https://api.tvmaze.com/shows"
@@ -37,7 +39,6 @@ const Movies = () => {
 
     const allGenres = new Set<string>();
     const allStatuses = new Set<string>();
-
     fetchedMovies.forEach((movie) => {
       movie.genres.forEach((genre) => allGenres.add(genre));
       allStatuses.add(movie.status);
@@ -240,6 +241,7 @@ const Movies = () => {
           onChange={handleSortChange}
           perViewChange={handlePerViewChange}
           perViewValue={moviesPerView}
+          movieAmount={movieAmount}
         />
         {movies.length === 0 ? (
           <div className='grid justify-items-center w-full h-dvh pt-52'>
@@ -302,7 +304,7 @@ const Movies = () => {
                   </span>
                   <span className='flex w-full justify-between gap-4'>
                     <span className='flex flex-col h-fit w-fit text-nowrap'>
-                      <h5 className='text-lg font-semibold'>Rating</h5>
+                      <h5 className='text-md font-medium'>Rating</h5>
                       {movie.rating.average ? (
                         <p className='text-md font-medium'>
                           {movie.rating.average} / 10
@@ -320,8 +322,18 @@ const Movies = () => {
             ))}
           </div>
         )}
-
-        <div className='pagination-controls flex justify-center pb-10'>
+        <div className='pagination-controls flex justify-center items-center gap-2 pb-10'>
+          <button
+            onClick={() => handlePageClick(currentPage - 1)}
+            disabled={currentPage === 1}
+            className={`font-semibold w-20 h-10 mx-1 rounded-md ${
+              currentPage === 1
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-gray-800 hover:bg-green-500"
+            } text-white`}
+          >
+            Prev
+          </button>
           {getPageNumbers().map((page) => (
             <button
               key={page}
@@ -330,12 +342,23 @@ const Movies = () => {
               className={`font-semibold w-10 h-10 mx-1 rounded-md ${
                 page === currentPage
                   ? "bg-green-500 text-black"
-                  : "bg-gray-800 text-white"
+                  : "bg-gray-800 text-white hover:bg-green-500"
               }`}
             >
               {page}
             </button>
           ))}
+          <button
+            onClick={() => handlePageClick(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className={`font-semibold w-20 h-10 mx-1 rounded-md ${
+              currentPage === totalPages
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-gray-800 hover:bg-green-500"
+            } text-white`}
+          >
+            Next
+          </button>
         </div>
       </div>
     </section>

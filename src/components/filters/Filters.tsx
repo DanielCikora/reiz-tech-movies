@@ -1,5 +1,6 @@
 "use client";
-import { ChangeEventHandler, useState } from "react";
+import { ChangeEventHandler, useState, useRef, useEffect } from "react";
+
 interface FiltersDataTypes {
   genres: string[];
   selectedGenres: string[];
@@ -12,7 +13,9 @@ interface FiltersDataTypes {
   sortType: string;
   perViewChange: ChangeEventHandler<HTMLSelectElement>;
   perViewValue: number;
+  movieAmount: number;
 }
+
 const Filters = ({
   genres,
   selectedGenres,
@@ -26,27 +29,54 @@ const Filters = ({
   sortType,
   perViewChange,
   perViewValue,
+  movieAmount,
 }: FiltersDataTypes & { onClearFilters: () => void }) => {
   const [genreClick, setGenreClick] = useState<boolean>(false);
   const [statusClick, setStatusClick] = useState<boolean>(false);
+  const genreRef = useRef<HTMLDivElement | null>(null);
+  const statusRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        genreRef.current &&
+        !genreRef.current.contains(event.target as Node) &&
+        statusRef.current &&
+        !statusRef.current.contains(event.target as Node)
+      ) {
+        setGenreClick(false);
+        setStatusClick(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const handleGenreClick = () => {
-    setGenreClick((prevGenreClick) => !prevGenreClick);
+    setGenreClick((prev) => !prev);
     setStatusClick(false);
   };
+
   const handleStatusClick = () => {
-    setStatusClick((prevGenreClick) => !prevGenreClick);
+    setStatusClick((prev) => !prev);
     setGenreClick(false);
   };
+
   const handleClearFilters = () => {
     onClearFilters();
     setGenreClick(false);
     setStatusClick(false);
   };
+
   return (
     <section className='filtering-section py-10 flex md:flex-row flex-col sm:items-center lg:gap-4 gap-2 w-full'>
       <div className='filtering-content flex w-full text-nowrap md:flex-row flex-col md:items-start sm:items-start items-center lg:gap-4 gap-2'>
         <select
-          className='md:text-md text-sm w-full text-center lg:max-w-[300px] md:max-w-[200px] max-w-[300px]  dark:bg-gray-700 bg-transparent cursor-pointer border border-solid border-dark dark:text-offWhite relative z-10 rounded py-[8px] font-semibold'
+          className='md:text-md text-sm w-full text-center lg:max-w-[300px] md:max-w-[200px] max-w-[300px] dark:bg-gray-700 bg-transparent cursor-pointer border border-solid border-dark dark:text-offWhite relative z-10 rounded py-[8px] font-semibold'
           onChange={onChange}
           value={sortType}
         >
@@ -56,6 +86,7 @@ const Filters = ({
           <option value='premiered-asc'>Premiered Ascending</option>
           <option value='premiered-desc'>Premiered Descending</option>
         </select>
+
         <button
           className={`md:text-md text-sm ${
             genreClick ? "z-50" : "z-20"
@@ -65,11 +96,12 @@ const Filters = ({
         >
           Genre Filter ( {genreCounter} )
           <div
+            ref={genreRef}
             className={`filter-content absolute z-50 md:left-0 left-[50%] md:-translate-x-[0] -translate-x-[50%] top-10 rounded px-4 overflow-y-auto max-h-[300px] w-full flex flex-col gap-2 dark:bg-gray-700 bg-offWhite transition-all duration-700 ease-in-out ${
               genreClick
                 ? "h-[1200px] py-4 border border-solid border-dark"
                 : "h-0"
-            } `}
+            }`}
           >
             <label className='flex justify-end gap-2 cursor-pointer'>
               <input
@@ -91,7 +123,7 @@ const Filters = ({
             {genres.map((genre) => (
               <label
                 key={genre}
-                className='flex justify-end gap-2 cursor-pointer '
+                className='flex justify-end gap-2 cursor-pointer'
               >
                 <input
                   type='checkbox'
@@ -112,6 +144,7 @@ const Filters = ({
             ))}
           </div>
         </button>
+
         <button
           className={`md:text-md text-sm ${
             genreClick ? "z-40" : "z-20"
@@ -121,11 +154,12 @@ const Filters = ({
         >
           Status Filter
           <div
+            ref={statusRef}
             className={`filter-content absolute z-20 md:left-0 left-[50%] md:-translate-x-[0] -translate-x-[50%] top-10 rounded px-4 overflow-y-auto max-h-fit w-full sm:max-w-[300px] flex flex-col gap-2 dark:bg-gray-700 bg-offWhite transition-all duration-700 ease-in-out ${
               statusClick
                 ? "h-[300px] py-4 border border-solid border-dark"
                 : "h-0"
-            } `}
+            }`}
           >
             <label className='flex justify-start w-full gap-2 cursor-pointer'>
               <input
@@ -179,19 +213,24 @@ const Filters = ({
         >
           Reset All Filters
         </button>
-        <select
-          className='text-center md:text-md text-sm w-full max-w-fit dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative rounded p-2 font-semibold'
-          onChange={perViewChange}
-          value={perViewValue}
-        >
-          <option value={6}>6</option>
-          <option value={12}>12</option>
-          <option value={18}>18</option>
-          <option value={24}>24</option>
-          <option value={30}>30</option>
-        </select>
+        <div className='flex md:flex-row flex-col items-center md:gap-4 gap-2 md:ml-auto ml-0'>
+          Viewing
+          <select
+            className='text-center md:text-md text-sm w-fit max-w-fit dark:bg-gray-700 bg-transparent border border-solid border-dark dark:text-offWhite relative rounded p-2 font-semibold'
+            onChange={perViewChange}
+            value={perViewValue}
+          >
+            <option value={6}>6</option>
+            <option value={12}>12</option>
+            <option value={18}>18</option>
+            <option value={24}>24</option>
+            <option value={30}>30</option>
+          </select>
+          Out of {movieAmount} Movies
+        </div>
       </div>
     </section>
   );
 };
+
 export default Filters;
